@@ -11,7 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.github.hvalmer.exceptions.ExceptionResponse;
-import com.github.hvalmer.exceptions.UnsupportedOperaException;
+import com.github.hvalmer.exceptions.ResourceNotFoundException;
 
 @ControllerAdvice //juntar os tratamentos de todos os controllers
 @RestController
@@ -32,8 +32,8 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	} 
 	
 	//metodo para tratar exception mais especifica
-	@ExceptionHandler(UnsupportedOperaException.class)
-	public final ResponseEntity<ExceptionResponse> handleBadRequestExceptions(
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public final ResponseEntity<ExceptionResponse> handleNotFoundExceptions(
 			Exception ex, WebRequest request) {
 		//retornando a exceção customizada
 		ExceptionResponse exceptionResponse = new ExceptionResponse(
@@ -41,7 +41,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 				ex.getMessage(), 
 				request.getDescription(false));
 		
-		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 		
 	} 
 }
