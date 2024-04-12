@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.hvalmer.data.vo.v1.PersonVO;
+import com.github.hvalmer.data.vo.v2.PersonVOV2;
 import com.github.hvalmer.exceptions.ResourceNotFoundException;
 import com.github.hvalmer.mapper.DozerMapper;
+import com.github.hvalmer.mapper.custom.PersonMapper;
 import com.github.hvalmer.model.Person;
 import com.github.hvalmer.repositories.PersonRepository;
 
@@ -19,6 +21,9 @@ public class PersonServices  {
 	
 	@Autowired
 	PersonRepository repository;
+
+	@Autowired
+	PersonMapper mapper;
 	
 	public List<PersonVO> findAll() {
 		
@@ -51,6 +56,20 @@ public class PersonServices  {
 		var entity = DozerMapper.parseObject(person, Person.class);
 		//retornando VO novamente
 		var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
+		return vo;
+	}
+	
+	/*recebe um VO, 
+	 *converte para uma entidade do tipo person,
+	 *salva no BD,
+	 *pega o resultado, passando para um objeto vo*/
+	public PersonVOV2 createV2(PersonVOV2 person) {
+		
+		//implementando mensagem no log 
+		logger.info("Creating one person with V2!");
+		var entity = mapper.convertVoToEntity(person);
+		//retornando VO novamente
+		var vo = mapper.convertEntityToVo(repository.save(entity));
 		return vo;
 	}
 	
