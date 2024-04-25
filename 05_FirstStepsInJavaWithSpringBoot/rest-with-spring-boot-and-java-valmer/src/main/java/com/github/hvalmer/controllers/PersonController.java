@@ -19,7 +19,7 @@ import com.github.hvalmer.data.vo.v2.PersonVOV2;
 import com.github.hvalmer.services.PersonServices;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/api/person/v1")
 public class PersonController {
 	
 	@Autowired
